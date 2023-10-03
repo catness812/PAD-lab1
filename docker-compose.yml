@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: journaling-app-db
+    environment:
+      POSTGRES_DB : journaling-app-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      PGDATA: /data/journaling-app-db
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - postgres-db:/data/postgres
+    ports:
+      - "5432:5432"
+
+  mongodb:
+    image: mongo:latest
+    container_name: journaling-app-mongo
+    environment:
+    MONGO_INITDB_ROOT_USERNAME: root
+    MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_cont:/data/db
+
+  redis:
+    image: redis:latest
+    container_name: journaling-app-redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres-db:
+    driver: local
+  redis-data:
+    driver: local
+  mongodb_data_cont:
+    driver: local
