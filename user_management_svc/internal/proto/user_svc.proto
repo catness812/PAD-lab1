@@ -1,9 +1,0 @@
-syntax="proto3";
-
-option go_package="./pb";
-
-package proto;
-
-// import "user_msg.proto";
-
-service UserService {}
