@@ -16,8 +16,8 @@ class UserServiceStub(object):
         """
         self.RegisterUser = channel.unary_unary(
                 '/proto.UserService/RegisterUser',
-                request_serializer=user__svc__pb2.RegisterRequest.SerializeToString,
-                response_deserializer=user__svc__pb2.RegisterResponse.FromString,
+                request_serializer=user__svc__pb2.RegisterUserRequest.SerializeToString,
+                response_deserializer=user__svc__pb2.RegisterUserResponse.FromString,
                 )
 
 
@@ -35,8 +35,8 @@ def add_UserServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RegisterUser': grpc.unary_unary_rpc_method_handler(
                     servicer.RegisterUser,
-                    request_deserializer=user__svc__pb2.RegisterRequest.FromString,
-                    response_serializer=user__svc__pb2.RegisterResponse.SerializeToString,
+                    request_deserializer=user__svc__pb2.RegisterUserRequest.FromString,
+                    response_serializer=user__svc__pb2.RegisterUserResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -60,7 +60,7 @@ class UserService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/proto.UserService/RegisterUser',
-            user__svc__pb2.RegisterRequest.SerializeToString,
-            user__svc__pb2.RegisterResponse.FromString,
+            user__svc__pb2.RegisterUserRequest.SerializeToString,
+            user__svc__pb2.RegisterUserResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

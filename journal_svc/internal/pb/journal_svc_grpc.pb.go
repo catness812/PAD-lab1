@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type JournalServiceClient interface {
-	RegisterEntry(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	RegisterEntry(ctx context.Context, in *RegisterEntryRequest, opts ...grpc.CallOption) (*RegisterEntryResponse, error)
 }
 
 type journalServiceClient struct {
@@ -37,8 +37,8 @@ func NewJournalServiceClient(cc grpc.ClientConnInterface) JournalServiceClient {
 	return &journalServiceClient{cc}
 }
 
-func (c *journalServiceClient) RegisterEntry(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
-	out := new(RegisterResponse)
+func (c *journalServiceClient) RegisterEntry(ctx context.Context, in *RegisterEntryRequest, opts ...grpc.CallOption) (*RegisterEntryResponse, error) {
+	out := new(RegisterEntryResponse)
 	err := c.cc.Invoke(ctx, JournalService_RegisterEntry_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (c *journalServiceClient) RegisterEntry(ctx context.Context, in *RegisterRe
 // All implementations must embed UnimplementedJournalServiceServer
 // for forward compatibility
 type JournalServiceServer interface {
-	RegisterEntry(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	RegisterEntry(context.Context, *RegisterEntryRequest) (*RegisterEntryResponse, error)
 	mustEmbedUnimplementedJournalServiceServer()
 }
 
@@ -58,7 +58,7 @@ type JournalServiceServer interface {
 type UnimplementedJournalServiceServer struct {
 }
 
-func (UnimplementedJournalServiceServer) RegisterEntry(context.Context, *RegisterRequest) (*RegisterResponse, error) {
+func (UnimplementedJournalServiceServer) RegisterEntry(context.Context, *RegisterEntryRequest) (*RegisterEntryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterEntry not implemented")
 }
 func (UnimplementedJournalServiceServer) mustEmbedUnimplementedJournalServiceServer() {}
@@ -75,7 +75,7 @@ func RegisterJournalServiceServer(s grpc.ServiceRegistrar, srv JournalServiceSer
 }
 
 func _JournalService_RegisterEntry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterRequest)
+	in := new(RegisterEntryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func _JournalService_RegisterEntry_Handler(srv interface{}, ctx context.Context,
 		FullMethod: JournalService_RegisterEntry_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(JournalServiceServer).RegisterEntry(ctx, req.(*RegisterRequest))
+		return srv.(JournalServiceServer).RegisterEntry(ctx, req.(*RegisterEntryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

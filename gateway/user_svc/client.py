@@ -1,10 +1,15 @@
 import grpc
-from user_svc.config.config import host, grpc_port
 from flask import request, jsonify
 from user_svc.routes import register_user
+from service_discovery import discover_grpc_server
 
 def start_client():
-    return grpc.insecure_channel(f'{host}:{grpc_port}')
+    grpc_server_address = discover_grpc_server("user-grpc-service")
+
+    if grpc_server_address:
+        return grpc.insecure_channel(grpc_server_address)
+    else:
+        raise RuntimeError("gRPC server not found")
 
 channel = start_client()
 

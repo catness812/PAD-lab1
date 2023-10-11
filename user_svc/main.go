@@ -30,7 +30,11 @@ func grpcStart(userSvc rpctransport.IUserService) {
 		panic(err)
 	}
 
-	s := grpc.NewServer()
+	opts := []grpc.ServerOption{
+		grpc.MaxConcurrentStreams(20),
+	}
+
+	s := grpc.NewServer(opts...)
 	pb.RegisterUserServiceServer(s, &rpctransport.Server{
 		UserService: userSvc,
 	})

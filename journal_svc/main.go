@@ -29,7 +29,11 @@ func grpcStart(journalSvc rpctransport.IJournalService) {
 		panic(err)
 	}
 
-	s := grpc.NewServer()
+	opts := []grpc.ServerOption{
+		grpc.MaxConcurrentStreams(20),
+	}
+
+	s := grpc.NewServer(opts...)
 	pb.RegisterJournalServiceServer(s, &rpctransport.Server{
 		JournalService: journalSvc,
 	})

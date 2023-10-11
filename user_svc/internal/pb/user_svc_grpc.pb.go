@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	RegisterUser(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error)
 }
 
 type userServiceClient struct {
@@ -37,8 +37,8 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) RegisterUser(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
-	out := new(RegisterResponse)
+func (c *userServiceClient) RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error) {
+	out := new(RegisterUserResponse)
 	err := c.cc.Invoke(ctx, UserService_RegisterUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (c *userServiceClient) RegisterUser(ctx context.Context, in *RegisterReques
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	RegisterUser(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -58,7 +58,7 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) RegisterUser(context.Context, *RegisterRequest) (*RegisterResponse, error) {
+func (UnimplementedUserServiceServer) RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterUser not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
@@ -75,7 +75,7 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 }
 
 func _UserService_RegisterUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterRequest)
+	in := new(RegisterUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func _UserService_RegisterUser_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: UserService_RegisterUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).RegisterUser(ctx, req.(*RegisterRequest))
+		return srv.(UserServiceServer).RegisterUser(ctx, req.(*RegisterUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

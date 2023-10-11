@@ -11,6 +11,7 @@ import (
 
 type IUserService interface {
 	RegisterNewUser(user models.User) error
+	FindUser(username string) (*models.User, error)
 }
 
 type Server struct {
@@ -18,26 +19,32 @@ type Server struct {
 	UserService IUserService
 }
 
-func (s *Server) RegisterUser(_ context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+func (s *Server) RegisterUser(_ context.Context, req *pb.RegisterUserRequest) (*pb.RegisterUserResponse, error) {
 	newUser := models.User{
 		Username: req.User.Username,
 		Password: req.User.Password,
 	}
 
-	if err := s.UserService.RegisterNewUser(newUser); err != nil {
-		if err.Error() == "user has already signed up" {
-			slog.Errorf("User '%v' has already signed up", newUser.Username)
-			return &pb.RegisterResponse{
-				Message: fmt.Sprintf("User '%v' has already signed up", newUser.Username),
-			}, nil
-		} else {
+	user, err := s.UserService.FindUser(req.User.Username)
+	if err != nil {
+		slog.Errorf("Error finding user: %v", err)
+		return nil, err
+	}
+
+	if user.ID == 0 {
+		if err := s.UserService.RegisterNewUser(newUser); err != nil {
 			slog.Errorf("Error registering new user: %v", err)
 			return nil, err
 		}
+	} else if user.ID != 0 {
+		slog.Errorf("User '%v' has already signed up", user.Username)
+		return &pb.RegisterUserResponse{
+			Message: fmt.Sprintf("User '%v' has already signed up", user.Username),
+		}, nil
 	}
 
 	slog.Infof("User '%v' successfully created", newUser.Username)
-	return &pb.RegisterResponse{
+	return &pb.RegisterUserResponse{
 		Message: fmt.Sprintf("User '%v' successfully signed up", newUser.Username),
 	}, nil
 }

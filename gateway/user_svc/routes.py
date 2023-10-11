@@ -7,7 +7,7 @@ def register_user(channel, data):
 
     stub = pb2_grpc.UserServiceStub(channel)
     user = pb2.User(username=username, password=password)
-    req = pb2.RegisterRequest(user=user)
+    req = pb2.RegisterUserRequest(user=user)
     
     return stub.RegisterUser(req)
 
