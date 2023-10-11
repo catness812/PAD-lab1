@@ -25,13 +25,13 @@ var Cfg Config
 func LoadConfig() {
 	var errOccurred bool
 
-	data, err := os.ReadFile("./user_management_svc/config.yml")
+	data, err := os.ReadFile("./user_svc/config.yml")
 	if err != nil {
 		errOccurred = true
 	}
 
 	if errOccurred {
-		data, err = os.ReadFile("../user_management_svc/config.yml")
+		data, err = os.ReadFile("../user_svc/config.yml")
 		if err == nil {
 			errOccurred = false
 		}

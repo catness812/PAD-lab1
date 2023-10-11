@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/catness812/PAD-lab1/user_management_svc/internal/models"
 	"gorm.io/gorm"
 )
@@ -16,9 +18,14 @@ func InitUserRepository(db *gorm.DB) *UserRepository {
 }
 
 func (repo *UserRepository) Save(user *models.User) error {
-	err := repo.db.Create(user).Error
-	if err != nil {
-		return err
+	err := repo.db.First(&user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := repo.db.Create(user).Error
+		if err != nil {
+			return err
+		}
+	} else {
+		return errors.New("user has already signed up")
 	}
 	return nil
 }

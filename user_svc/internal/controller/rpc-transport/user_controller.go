@@ -18,19 +18,24 @@ type Server struct {
 	UserService IUserService
 }
 
-func (s *Server) RegisterNewUser(_ context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+func (s *Server) RegisterUser(_ context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	newUser := models.User{
-		Username: req.User.Username,
-		Password: req.User.Password,
+		Username: req.Username,
+		Password: req.Password,
 	}
 
-	if err := s.UserService.RegisterUser(newUser); err != nil {
+	if err := s.UserService.RegisterUser(newUser); err.Error() == "user has already signed up" {
+		slog.Errorf("User '%v' has already signed up", newUser.Username)
+		return &pb.RegisterResponse{
+			Message: fmt.Sprintf("User '%v' has already signed up", newUser.Username),
+		}, nil
+	} else if err != nil {
 		slog.Errorf("Error registering new user: %v", err)
 		return nil, err
 	}
 
-	slog.Info("User \"%v\" successfully created", newUser.Username)
+	slog.Infof("User '%v' successfully created", newUser.Username)
 	return &pb.RegisterResponse{
-		Message: fmt.Sprintf("User \"%v\" successfully signed up", newUser.Username),
+		Message: fmt.Sprintf("User '%v' successfully signed up", newUser.Username),
 	}, nil
 }
