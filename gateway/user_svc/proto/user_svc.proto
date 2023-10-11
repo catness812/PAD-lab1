@@ -4,9 +4,13 @@ option go_package="./pb";
 
 package proto;
 
-message RegisterRequest {
+message User {
     string username = 1;
     string password = 2;
+}
+
+message RegisterRequest {
+    User user = 1;
 }
 
 message RegisterResponse {
