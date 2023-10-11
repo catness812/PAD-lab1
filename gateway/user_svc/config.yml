@@ -1,0 +1,3 @@
+host: localhost
+grpc_port: 50051
+http_port: 5000
