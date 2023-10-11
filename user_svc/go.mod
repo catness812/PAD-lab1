@@ -1,4 +1,4 @@
-module github.com/catness812/PAD-lab1/user_management_svc
+module github.com/catness812/PAD-lab1/user_svc
 
 go 1.21.0
 

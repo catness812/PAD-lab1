@@ -1,6 +1,6 @@
 package service
 
-import "github.com/catness812/PAD-lab1/user_management_svc/internal/models"
+import "github.com/catness812/PAD-lab1/user_svc/internal/models"
 
 type IUserRepository interface {
 	Save(user *models.User) error
@@ -16,6 +16,6 @@ func InitUserService(repo IUserRepository) *UserService {
 	}
 }
 
-func (svc *UserService) RegisterUser(user models.User) error {
+func (svc *UserService) RegisterNewUser(user models.User) error {
 	return svc.repo.Save(&user)
 }

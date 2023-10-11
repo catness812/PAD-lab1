@@ -3,8 +3,8 @@ package postgres
 import (
 	"fmt"
 
-	"github.com/catness812/PAD-lab1/user_management_svc/internal/config"
-	"github.com/catness812/PAD-lab1/user_management_svc/internal/models"
+	"github.com/catness812/PAD-lab1/user_svc/internal/config"
+	"github.com/catness812/PAD-lab1/user_svc/internal/models"
 	"github.com/gookit/slog"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

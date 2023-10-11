@@ -3,7 +3,7 @@ package repository
 import (
 	"errors"
 
-	"github.com/catness812/PAD-lab1/user_management_svc/internal/models"
+	"github.com/catness812/PAD-lab1/user_svc/internal/models"
 	"gorm.io/gorm"
 )
 
@@ -18,8 +18,11 @@ func InitUserRepository(db *gorm.DB) *UserRepository {
 }
 
 func (repo *UserRepository) Save(user *models.User) error {
-	err := repo.db.First(&user).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	err := repo.db.Where("username=?", user.Username).Find(&user).Error
+	if err != nil {
+		return err
+	}
+	if user.ID == 0 {
 		err := repo.db.Create(user).Error
 		if err != nil {
 			return err

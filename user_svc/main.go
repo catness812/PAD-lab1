@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/catness812/PAD-lab1/user_management_svc/internal/config"
-	rpctransport "github.com/catness812/PAD-lab1/user_management_svc/internal/controller/rpc-transport"
-	"github.com/catness812/PAD-lab1/user_management_svc/internal/pb"
-	"github.com/catness812/PAD-lab1/user_management_svc/internal/repository"
-	"github.com/catness812/PAD-lab1/user_management_svc/internal/service"
-	"github.com/catness812/PAD-lab1/user_management_svc/pkg/db/postgres"
+	"github.com/catness812/PAD-lab1/user_svc/internal/config"
+	rpctransport "github.com/catness812/PAD-lab1/user_svc/internal/controller/rpc-transport"
+	"github.com/catness812/PAD-lab1/user_svc/internal/pb"
+	"github.com/catness812/PAD-lab1/user_svc/internal/repository"
+	"github.com/catness812/PAD-lab1/user_svc/internal/service"
+	"github.com/catness812/PAD-lab1/user_svc/pkg/db/postgres"
+
 	"github.com/gookit/slog"
 	"google.golang.org/grpc"
 )
