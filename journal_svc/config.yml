@@ -1,0 +1,8 @@
+grpc_port: 50052
+
+mongo:
+  user: root
+  password: root
+  host: localhost
+  port: 27017
+  db_name: journaling-app-mongo
