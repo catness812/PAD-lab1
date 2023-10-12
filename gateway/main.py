@@ -3,11 +3,15 @@ from util.timeout import check_timeout
 from config.config import host, http_port
 from user_svc.client import register_user_handler
 from journal_svc.client import register_entry_handler
-from service_discovery import register_services
+from service_discovery import register_services, check
 
 register_services()
 
 app = Flask(__name__)
+
+@app.route('/health/<svc>', methods=['GET'])
+def health(svc):
+    return check(svc)
 
 @app.route('/users/register', methods=['POST'])
 def register_user_route():
