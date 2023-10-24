@@ -23,7 +23,7 @@ func connect() *mongo.Client {
 		fmt.Sprintf("mongodb://%s:%s@%s:%d",
 			config.Cfg.Database.User,
 			config.Cfg.Database.Password,
-			config.Cfg.Database.Host,
+			config.Cfg.Host,
 			config.Cfg.Database.Port)))
 
 	if err != nil {

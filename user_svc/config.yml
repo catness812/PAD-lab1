@@ -1,8 +1,8 @@
-grpc_port: 50051
+host: localhost
+grpc_port: 50052
 
 postgres:
   user: admin
   password: pass
-  host: localhost
   port: 5433
   db_name: journaling-app-db

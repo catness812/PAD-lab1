@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	Host     string   `yaml:"host"`
 	GrpcPort int      `yaml:"grpc_port"`
 	Database Postgres `yaml:"postgres"`
 }
@@ -15,7 +16,6 @@ type Config struct {
 type Postgres struct {
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
-	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
 	DBName   string `yaml:"db_name"`
 }

@@ -12,3 +12,9 @@ def register_entry(channel, data):
     
     return stub.RegisterEntry(req)
 
+def get_user_entries(channel, user):
+    stub = pb2_grpc.JournalServiceStub(channel)
+    req = pb2.GetUserEntriesRequest(username=user)
+    
+    return stub.GetUserEntries(req)
+

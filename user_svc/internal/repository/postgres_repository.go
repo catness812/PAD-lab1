@@ -31,3 +31,11 @@ func (repo *UserRepository) FindUserByUsername(username string) (*models.User, e
 	}
 	return &user, nil
 }
+
+func (repo *UserRepository) DeleteUserByUsername(username string) error {
+	err := repo.db.Unscoped().Where("username = ?", username).Delete(&models.User{}).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

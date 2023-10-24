@@ -19,12 +19,23 @@ class JournalServiceStub(object):
                 request_serializer=journal__svc__pb2.RegisterEntryRequest.SerializeToString,
                 response_deserializer=journal__svc__pb2.RegisterEntryResponse.FromString,
                 )
+        self.GetUserEntries = channel.unary_unary(
+                '/proto.JournalService/GetUserEntries',
+                request_serializer=journal__svc__pb2.GetUserEntriesRequest.SerializeToString,
+                response_deserializer=journal__svc__pb2.GetUserEntriesResponse.FromString,
+                )
 
 
 class JournalServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def RegisterEntry(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetUserEntries(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -37,6 +48,11 @@ def add_JournalServiceServicer_to_server(servicer, server):
                     servicer.RegisterEntry,
                     request_deserializer=journal__svc__pb2.RegisterEntryRequest.FromString,
                     response_serializer=journal__svc__pb2.RegisterEntryResponse.SerializeToString,
+            ),
+            'GetUserEntries': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUserEntries,
+                    request_deserializer=journal__svc__pb2.GetUserEntriesRequest.FromString,
+                    response_serializer=journal__svc__pb2.GetUserEntriesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -62,5 +78,22 @@ class JournalService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.JournalService/RegisterEntry',
             journal__svc__pb2.RegisterEntryRequest.SerializeToString,
             journal__svc__pb2.RegisterEntryResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetUserEntries(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.JournalService/GetUserEntries',
+            journal__svc__pb2.GetUserEntriesRequest.SerializeToString,
+            journal__svc__pb2.GetUserEntriesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -1,6 +1,7 @@
 syntax="proto3";
 
 option go_package="./pb";
+import "google/protobuf/empty.proto";
 
 package proto;
 
@@ -17,6 +18,12 @@ message RegisterUserResponse {
     string message = 1;
 }
 
+message DeleteUserResponse {
+    string message = 1;
+}
+
 service UserService {
     rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
+    rpc CheckIfUserExists(User) returns (google.protobuf.Empty);
+    rpc DeleteUser(User) returns (DeleteUserResponse);
 }

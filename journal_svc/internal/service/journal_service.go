@@ -4,6 +4,7 @@ import "github.com/catness812/PAD-lab1/journal_svc/internal/models"
 
 type IJournalRepository interface {
 	Save(entry *models.JournalEntry) error
+	GetEntries(username string) ([]models.JournalEntry, error)
 }
 
 type JournalService struct {
@@ -18,4 +19,8 @@ func InitJournalService(repo IJournalRepository) *JournalService {
 
 func (svc *JournalService) RegisterNewEntry(entry models.JournalEntry) error {
 	return svc.repo.Save(&entry)
+}
+
+func (svc *JournalService) GetUserEntries(username string) ([]models.JournalEntry, error) {
+	return svc.repo.GetEntries(username)
 }

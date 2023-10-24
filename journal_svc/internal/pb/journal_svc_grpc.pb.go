@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	JournalService_RegisterEntry_FullMethodName = "/proto.JournalService/RegisterEntry"
+	JournalService_RegisterEntry_FullMethodName  = "/proto.JournalService/RegisterEntry"
+	JournalService_GetUserEntries_FullMethodName = "/proto.JournalService/GetUserEntries"
 )
 
 // JournalServiceClient is the client API for JournalService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type JournalServiceClient interface {
 	RegisterEntry(ctx context.Context, in *RegisterEntryRequest, opts ...grpc.CallOption) (*RegisterEntryResponse, error)
+	GetUserEntries(ctx context.Context, in *GetUserEntriesRequest, opts ...grpc.CallOption) (*GetUserEntriesResponse, error)
 }
 
 type journalServiceClient struct {
@@ -46,11 +48,21 @@ func (c *journalServiceClient) RegisterEntry(ctx context.Context, in *RegisterEn
 	return out, nil
 }
 
+func (c *journalServiceClient) GetUserEntries(ctx context.Context, in *GetUserEntriesRequest, opts ...grpc.CallOption) (*GetUserEntriesResponse, error) {
+	out := new(GetUserEntriesResponse)
+	err := c.cc.Invoke(ctx, JournalService_GetUserEntries_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // JournalServiceServer is the server API for JournalService service.
 // All implementations must embed UnimplementedJournalServiceServer
 // for forward compatibility
 type JournalServiceServer interface {
 	RegisterEntry(context.Context, *RegisterEntryRequest) (*RegisterEntryResponse, error)
+	GetUserEntries(context.Context, *GetUserEntriesRequest) (*GetUserEntriesResponse, error)
 	mustEmbedUnimplementedJournalServiceServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedJournalServiceServer struct {
 
 func (UnimplementedJournalServiceServer) RegisterEntry(context.Context, *RegisterEntryRequest) (*RegisterEntryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterEntry not implemented")
+}
+func (UnimplementedJournalServiceServer) GetUserEntries(context.Context, *GetUserEntriesRequest) (*GetUserEntriesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserEntries not implemented")
 }
 func (UnimplementedJournalServiceServer) mustEmbedUnimplementedJournalServiceServer() {}
 
@@ -92,6 +107,24 @@ func _JournalService_RegisterEntry_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _JournalService_GetUserEntries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserEntriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(JournalServiceServer).GetUserEntries(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: JournalService_GetUserEntries_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(JournalServiceServer).GetUserEntries(ctx, req.(*GetUserEntriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // JournalService_ServiceDesc is the grpc.ServiceDesc for JournalService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var JournalService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterEntry",
 			Handler:    _JournalService_RegisterEntry_Handler,
+		},
+		{
+			MethodName: "GetUserEntries",
+			Handler:    _JournalService_GetUserEntries_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -11,3 +11,12 @@ def register_user(channel, data):
     
     return stub.RegisterUser(req)
 
+def delete_user(channel, data):
+    username = data.get('username', '')
+    password = data.get('password', '')
+
+    stub = pb2_grpc.UserServiceStub(channel)
+    user = pb2.User(username=username, password=password)
+    
+    return stub.DeleteUser(user)
+

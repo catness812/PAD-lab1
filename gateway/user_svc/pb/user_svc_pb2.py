@@ -11,9 +11,10 @@ from google.protobuf.internal import builder as _builder
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0euser_svc.proto\x12\x05proto\"*\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"0\n\x13RegisterUserRequest\x12\x19\n\x04user\x18\x01 \x01(\x0b\x32\x0b.proto.User\"\'\n\x14RegisterUserResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2V\n\x0bUserService\x12G\n\x0cRegisterUser\x12\x1a.proto.RegisterUserRequest\x1a\x1b.proto.RegisterUserResponseB\x06Z\x04./pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0euser_svc.proto\x12\x05proto\x1a\x1bgoogle/protobuf/empty.proto\"*\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"0\n\x13RegisterUserRequest\x12\x19\n\x04user\x18\x01 \x01(\x0b\x32\x0b.proto.User\"\'\n\x14RegisterUserResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"%\n\x12\x44\x65leteUserResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\xc6\x01\n\x0bUserService\x12G\n\x0cRegisterUser\x12\x1a.proto.RegisterUserRequest\x1a\x1b.proto.RegisterUserResponse\x12\x38\n\x11\x43heckIfUserExists\x12\x0b.proto.User\x1a\x16.google.protobuf.Empty\x12\x34\n\nDeleteUser\x12\x0b.proto.User\x1a\x19.proto.DeleteUserResponseB\x06Z\x04./pbb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -21,12 +22,14 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'user_svc_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'Z\004./pb'
-  _globals['_USER']._serialized_start=25
-  _globals['_USER']._serialized_end=67
-  _globals['_REGISTERUSERREQUEST']._serialized_start=69
-  _globals['_REGISTERUSERREQUEST']._serialized_end=117
-  _globals['_REGISTERUSERRESPONSE']._serialized_start=119
-  _globals['_REGISTERUSERRESPONSE']._serialized_end=158
-  _globals['_USERSERVICE']._serialized_start=160
-  _globals['_USERSERVICE']._serialized_end=246
+  _globals['_USER']._serialized_start=54
+  _globals['_USER']._serialized_end=96
+  _globals['_REGISTERUSERREQUEST']._serialized_start=98
+  _globals['_REGISTERUSERREQUEST']._serialized_end=146
+  _globals['_REGISTERUSERRESPONSE']._serialized_start=148
+  _globals['_REGISTERUSERRESPONSE']._serialized_end=187
+  _globals['_DELETEUSERRESPONSE']._serialized_start=189
+  _globals['_DELETEUSERRESPONSE']._serialized_end=226
+  _globals['_USERSERVICE']._serialized_start=229
+  _globals['_USERSERVICE']._serialized_end=427
 # @@protoc_insertion_point(module_scope)

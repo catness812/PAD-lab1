@@ -1,5 +1,5 @@
-import requests
 from consul import Consul
+import requests
 
 consul_url = "http://localhost:8500/v1/agent/service/register"
 
@@ -10,24 +10,8 @@ gateway = {
     "Port": 5000,
 }
 
-svc1 = {
-    "ID": "user-grpc-service",
-    "Name": "user-grpc-service",
-    "Address": "localhost",
-    "Port": 50051,
-}
-
-svc2 = {
-    "ID": "journal-grpc-service",
-    "Name": "journal-grpc-service",
-    "Address": "localhost",
-    "Port": 50052,
-}
-
 def register_services():
     requests.put(consul_url, json=gateway)
-    requests.put(consul_url, json=svc1)
-    requests.put(consul_url, json=svc2)
 
 consul = Consul()
 

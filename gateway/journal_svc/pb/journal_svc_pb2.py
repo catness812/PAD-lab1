@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11journal_svc.proto\x12\x05proto\"9\n\x05\x45ntry\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\"3\n\x14RegisterEntryRequest\x12\x1b\n\x05\x65ntry\x18\x01 \x01(\x0b\x32\x0c.proto.Entry\"(\n\x15RegisterEntryResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\\\n\x0eJournalService\x12J\n\rRegisterEntry\x12\x1b.proto.RegisterEntryRequest\x1a\x1c.proto.RegisterEntryResponseB\x06Z\x04./pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11journal_svc.proto\x12\x05proto\"9\n\x05\x45ntry\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\"3\n\x14RegisterEntryRequest\x12\x1b\n\x05\x65ntry\x18\x01 \x01(\x0b\x32\x0c.proto.Entry\"(\n\x15RegisterEntryResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\")\n\x15GetUserEntriesRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"H\n\x16GetUserEntriesResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x1d\n\x07\x65ntries\x18\x02 \x03(\x0b\x32\x0c.proto.Entry2\xab\x01\n\x0eJournalService\x12J\n\rRegisterEntry\x12\x1b.proto.RegisterEntryRequest\x1a\x1c.proto.RegisterEntryResponse\x12M\n\x0eGetUserEntries\x12\x1c.proto.GetUserEntriesRequest\x1a\x1d.proto.GetUserEntriesResponseB\x06Z\x04./pbb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -27,6 +27,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_REGISTERENTRYREQUEST']._serialized_end=138
   _globals['_REGISTERENTRYRESPONSE']._serialized_start=140
   _globals['_REGISTERENTRYRESPONSE']._serialized_end=180
-  _globals['_JOURNALSERVICE']._serialized_start=182
-  _globals['_JOURNALSERVICE']._serialized_end=274
+  _globals['_GETUSERENTRIESREQUEST']._serialized_start=182
+  _globals['_GETUSERENTRIESREQUEST']._serialized_end=223
+  _globals['_GETUSERENTRIESRESPONSE']._serialized_start=225
+  _globals['_GETUSERENTRIESRESPONSE']._serialized_end=297
+  _globals['_JOURNALSERVICE']._serialized_start=300
+  _globals['_JOURNALSERVICE']._serialized_end=471
 # @@protoc_insertion_point(module_scope)

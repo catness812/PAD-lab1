@@ -9,6 +9,7 @@ import (
 	"github.com/catness812/PAD-lab1/user_svc/internal/pb"
 	"github.com/catness812/PAD-lab1/user_svc/internal/repository"
 	"github.com/catness812/PAD-lab1/user_svc/internal/service"
+	"github.com/catness812/PAD-lab1/user_svc/internal/utils"
 	"github.com/catness812/PAD-lab1/user_svc/pkg/db/postgres"
 
 	"github.com/gookit/slog"
@@ -20,7 +21,10 @@ func main() {
 	db := postgres.LoadDatabase()
 	userRepo := repository.InitUserRepository(db)
 	userSvc := service.InitUserService(userRepo)
-	grpcStart(userSvc)
+	go grpcStart(userSvc)
+	utils.RegisterService()
+
+	select {}
 }
 
 func grpcStart(userSvc rpctransport.IUserService) {

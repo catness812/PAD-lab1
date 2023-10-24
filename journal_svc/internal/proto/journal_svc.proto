@@ -18,6 +18,16 @@ message RegisterEntryResponse {
     string message = 1;
 }
 
+message GetUserEntriesRequest {
+    string username = 1;
+}
+
+message GetUserEntriesResponse {
+    string message = 1;
+    repeated Entry entries = 2;
+}
+
 service JournalService {
     rpc RegisterEntry(RegisterEntryRequest) returns (RegisterEntryResponse);
+    rpc GetUserEntries(GetUserEntriesRequest) returns (GetUserEntriesResponse);
 }

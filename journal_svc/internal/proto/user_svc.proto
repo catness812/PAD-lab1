@@ -1,0 +1,14 @@
+syntax="proto3";
+
+option go_package="./pb";
+import "google/protobuf/empty.proto";
+
+package proto;
+
+message User {
+    string username = 1;
+}
+
+service UserService {
+    rpc CheckIfUserExists(User) returns (google.protobuf.Empty);
+}

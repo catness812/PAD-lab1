@@ -8,14 +8,14 @@ import (
 )
 
 type Config struct {
-	GrpcPort int   `yaml:"grpc_port"`
-	Database Mongo `yaml:"mongo"`
+	Host     string `yaml:"host"`
+	GrpcPort int    `yaml:"grpc_port"`
+	Database Mongo  `yaml:"mongo"`
 }
 
 type Mongo struct {
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
-	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
 	DBName   string `yaml:"db_name"`
 }

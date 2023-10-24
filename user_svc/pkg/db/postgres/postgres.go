@@ -29,7 +29,7 @@ func connect() *gorm.DB {
 	password=%s
 	port=%d
 	sslmode=disable`,
-		config.Cfg.Database.Host,
+		config.Cfg.Host,
 		config.Cfg.Database.DBName,
 		config.Cfg.Database.User,
 		config.Cfg.Database.Password,

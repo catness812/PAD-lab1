@@ -9,6 +9,7 @@ import (
 	"github.com/catness812/PAD-lab1/journal_svc/internal/pb"
 	"github.com/catness812/PAD-lab1/journal_svc/internal/repository"
 	"github.com/catness812/PAD-lab1/journal_svc/internal/service"
+	"github.com/catness812/PAD-lab1/journal_svc/internal/utils"
 	"github.com/catness812/PAD-lab1/journal_svc/pkg/db/mongo"
 	"github.com/gookit/slog"
 	"google.golang.org/grpc"
@@ -19,7 +20,10 @@ func main() {
 	db := mongo.LoadDatabase()
 	journalRepo := repository.InitJournalRepository(db)
 	journalSvc := service.InitJournalService(journalRepo)
-	grpcStart(journalSvc)
+	go grpcStart(journalSvc)
+	utils.RegisterService()
+
+	select {}
 }
 
 func grpcStart(journalSvc rpctransport.IJournalService) {
