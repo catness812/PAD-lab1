@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"fmt"
 	"strconv"
 
-	"github.com/catness812/PAD-lab1/journal_svc/internal/config"
 	"github.com/catness812/PAD-lab1/journal_svc/internal/pb"
 	"github.com/gookit/slog"
 	"github.com/hashicorp/consul/api"
@@ -13,11 +13,11 @@ import (
 
 func createConsulClient() (*api.Client, error) {
 	config := api.DefaultConfig()
-	config.Address = "localhost:8500"
+	config.Address = "consul:8500"
 	return api.NewClient(config)
 }
 
-func RegisterService() {
+func RegisterService(port int) {
 	client, err := createConsulClient()
 	if err != nil {
 		slog.Error(err)
@@ -25,16 +25,18 @@ func RegisterService() {
 	}
 
 	registration := new(api.AgentServiceRegistration)
-	registration.ID = "journal-grpc-svc"
+	registration.ID = fmt.Sprintf("journal-grpc-svc-%d", port)
 	registration.Name = "journal-grpc-svc"
-	registration.Address = config.Cfg.Host
-	registration.Port = config.Cfg.GrpcPort
+	registration.Address = "journal-service"
+	registration.Port = port
 
 	err = client.Agent().ServiceRegister(registration)
 	if err != nil {
 		slog.Error(err)
 		panic(err)
 	}
+
+	slog.Infof("Journal Service on port %d registered", port)
 }
 
 func FindUserService(serviceName string) (pb.UserServiceClient, error) {

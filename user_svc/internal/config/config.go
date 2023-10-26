@@ -14,6 +14,7 @@ type Config struct {
 }
 
 type Postgres struct {
+	Host     string `yaml:"host"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	Port     int    `yaml:"port"`

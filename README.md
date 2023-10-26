@@ -19,18 +19,15 @@ Real-world examples of well-known projects that employ microservices include:
 
 ## **Application Services:**
 
-1. User Authentication (JWT Middleware)
-2. User Creation & Maintenance
-3. Journal Entries Creation & Maintenance
-4. User Accounts View
-5. Journal Entries View
+1. User Creation & Maintenance
+2. Journal Entries Creation & Maintenance
     
 
-<img src="https://content.pstmn.io/d09cc3bf-c855-4463-94dc-14576beae6a1/bWljcm9zZXJ2aWNlcy1hcmNoaXRlY3R1cmUucG5n" alt="Microservices%20Architecture%20Diagram">
+<img src="./architecture_diagram.png" alt="Microservices%20Architecture%20Diagram">
 
 **Technology Stack:** Golang, Python, Gin, Gorm, gRPC, REST API
 
-**Deployment and Scaling:** Kubernetes
+**Deployment:** Docker
 
 ## Endpoints
 
@@ -38,7 +35,7 @@ Real-world examples of well-known projects that employ microservices include:
 POST request with the purpose of user registration. It sends a JSON payload containing a username and password for a user account creation.
 #### Method: POST
 >```
->http://localhost:8000/users/register
+>http://127.0.0.1:5000/users/register
 >```
 #### Headers
 
@@ -64,13 +61,11 @@ POST request with the purpose of user registration. It sends a JSON payload cont
 }
 ```
 
-#### Authentication: no auth
-
-### Login User
-POST request designed for user authentication. It sends a JSON payload with a username and password to the server for login purposes.
-#### Method: POST
+### Delete User
+DELETE request intended to delete a user account, including authentication using a bearer token in the "Authorization" header, and the request body provides the user's password as a security measure to confirm the user's identity.
+#### Method: DELETE
 >```
->http://localhost:8000/users/login
+>http://127.0.0.1:5000/users/delete
 >```
 #### Headers
 
@@ -84,37 +79,6 @@ POST request designed for user authentication. It sends a JSON payload with a us
 ```json
 {
     "username":"test0",
-    "password":"test0"
-}
-```
-
-#### Response (**raw**)
-
-```json
-{
-    "access-token":"{{accessToken}}"
-}
-```
-
-#### Authentication: no auth
-
-### Delete User
-DELETE request intended to delete a user account, including authentication using a bearer token in the "Authorization" header, and the request body provides the user's password as a security measure to confirm the user's identity.
-#### Method: DELETE
->```
->http://localhost:8000/users/delete/test0
->```
-#### Headers
-
-|Content-Type|Value|
-|---|---|
-|Content-Type|application/json|
-|Accept|application/json|
-
-#### Body (**raw**)
-
-```json
-{
     "password":"test0"
 }
 ```
@@ -127,13 +91,11 @@ DELETE request intended to delete a user account, including authentication using
 }
 ```
 
-#### Authentication: bearer token
-
 ### Create Journal Entry
 POST request to create a new journal entry for a specific user. It sends a JSON payload containing the username, title, and description of the new entry, along with authorization using a bearer token.
 #### Method: POST
 >```
->http://localhost:8000/entries/create
+>http://127.0.0.1:5000/entries/create
 >```
 #### Headers
 
@@ -148,7 +110,7 @@ POST request to create a new journal entry for a specific user. It sends a JSON 
 {
     "username":"test0",
     "title":"aaa",
-    "description":"aaa"
+    "content":"aaa"
 }
 ```
 
@@ -160,13 +122,11 @@ POST request to create a new journal entry for a specific user. It sends a JSON 
 }
 ```
 
-#### Authentication: bearer token
-
 ### Get User's Journal Entries
 GET request to retrieve a user's journal entries.
 #### Method: GET
 >```
->http://localhost:8000/entries/test0
+>http://127.0.0.1:5000/entries/test0
 >```
 #### Headers
 
@@ -178,68 +138,11 @@ GET request to retrieve a user's journal entries.
 
 ```json
 {
-    "entries": {
-        "1": {
+    "entries": [
+        {
             "title":"aaa",
-            "description":"aaa"
+            "content":"aaa"
         }
-    }
+    ]
 }
 ```
-
-#### Authentication: bearer token
-
-### Get User's Journal Entry
-GET request to retrieve a user's specific journal entry.
-#### Method: GET
->```
->http://localhost:8000/entries/test0/1
->```
-#### Headers
-
-|Content-Type|Value|
-|---|---|
-|Accept|application/json|
-
-#### Response (**raw**)
-
-```json
-{
-    "title":"aaa",
-    "description":"aaa"
-}
-```
-
-#### Authentication: bearer token
-
-### Delete Journal Entry
-DELETE request intended to delete a user's journal entry, including authentication using a bearer token in the "Authorization" header, and the request body provides the user's username to confirm the user.
-#### Method: DELETE
->```
->http://localhost:8000/entries/delete
->```
-#### Headers
-
-|Content-Type|Value|
-|---|---|
-|Content-Type|application/json|
-|Accept|application/json|
-
-#### Body (**raw**)
-
-```json
-{
-    "username":"test0",
-    "title": "aaa"
-}
-```
-
-#### Response (**raw**)
-
-```json
-{
-    "message":"Journal entry successfully deleted"
-}
-```
-
-#### Authentication: bearer token

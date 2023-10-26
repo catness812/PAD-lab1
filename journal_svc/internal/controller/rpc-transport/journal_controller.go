@@ -3,12 +3,15 @@ package rpctransport
 import (
 	"context"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/catness812/PAD-lab1/journal_svc/internal/models"
 	"github.com/catness812/PAD-lab1/journal_svc/internal/pb"
 	usersvc "github.com/catness812/PAD-lab1/journal_svc/internal/user_svc"
 	"github.com/gookit/slog"
 )
+
+var JournalPingCounter int32
 
 type IJournalService interface {
 	RegisterNewEntry(entry models.JournalEntry) error
@@ -21,6 +24,7 @@ type Server struct {
 }
 
 func (s *Server) RegisterEntry(_ context.Context, req *pb.RegisterEntryRequest) (*pb.RegisterEntryResponse, error) {
+	atomic.AddInt32(&JournalPingCounter, 1)
 	if _, err := usersvc.UserServiceClient().CheckIfUserExists(context.Background(), &pb.User{Username: req.Entry.Username}); err != nil {
 		slog.Errorf("User '%v' not found", req.Entry.Username)
 		return &pb.RegisterEntryResponse{
@@ -46,6 +50,7 @@ func (s *Server) RegisterEntry(_ context.Context, req *pb.RegisterEntryRequest) 
 }
 
 func (s *Server) GetUserEntries(_ context.Context, req *pb.GetUserEntriesRequest) (*pb.GetUserEntriesResponse, error) {
+	atomic.AddInt32(&JournalPingCounter, 1)
 	if _, err := usersvc.UserServiceClient().CheckIfUserExists(context.Background(), &pb.User{Username: req.Username}); err != nil {
 		slog.Errorf("User '%v' not found", req.Username)
 		return &pb.GetUserEntriesResponse{

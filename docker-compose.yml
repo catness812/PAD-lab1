@@ -1,23 +1,58 @@
 version: '3.8'
 
 services:
+  consul-server:
+    image: hashicorp/consul:latest
+    networks:
+      - journaling-app-network
+    command: "agent -server -bootstrap"
+  consul-agent1:
+    image: hashicorp/consul:latest
+    container_name: consul
+    networks:
+      - journaling-app-network
+    ports:
+      - "8500:8500"
+    command: "agent -join consul-server -client 0.0.0.0 -ui"
+    links:
+      - consul-server
+    depends_on:
+      - consul-server
+  consul-agent2:
+    image: hashicorp/consul:latest
+    networks:
+      - journaling-app-network
+    command: "agent -join consul-server -client 0.0.0.0"
+    links:
+      - consul-server
+    depends_on:
+      - consul-server
+
   postgres:
-    image: postgres:latest
-    container_name: journaling-app-db
+    container_name: journaling-app-postgres
+    image: postgres:16.0
+    networks:
+      - journaling-app-network
     environment:
-      POSTGRES_DB : journaling-app-db
-      POSTGRES_USER: admin
+      POSTGRES_DB: journaling-app-db
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       PGDATA: /data/journaling-app-db
-      POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - postgres-db:/data/postgres
     ports:
-      - "5433:5432"
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   mongodb:
     image: mongo:latest
     container_name: journaling-app-mongo
+    networks:
+      - journaling-app-network
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
@@ -29,10 +64,45 @@ services:
   redis:
     image: redis:latest
     container_name: journaling-app-redis
+    networks:
+      - journaling-app-network
     volumes:
       - redis-data:/data
     ports:
       - "6379:6379"
+
+  user_svc:
+    image: user_svc:latest
+    container_name: user-service
+    ports:
+      - "50052:50052"
+    networks:
+      - journaling-app-network
+    depends_on:
+      - postgres
+      - redis
+
+  journal_svc:
+    image: journal_svc:latest
+    container_name: journal-service
+    ports:
+      - "50055:50055"
+    networks:
+      - journaling-app-network
+    depends_on:
+      - mongodb
+      - redis
+
+  gateway:
+    image: gateway:latest
+    container_name: gateway
+    ports:
+      - "5000:5000"
+    networks:
+      - journaling-app-network
+    depends_on:
+      - user_svc
+      - journal_svc
 
 volumes:
   postgres-db:
@@ -41,3 +111,7 @@ volumes:
     driver: local
   mongodb_data_cont:
     driver: local
+
+networks:
+  journaling-app-network:
+    driver: bridge

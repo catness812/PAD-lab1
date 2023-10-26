@@ -20,10 +20,9 @@ func LoadDatabase() *mongo.Collection {
 
 func connect() *mongo.Client {
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(
-		fmt.Sprintf("mongodb://%s:%s@%s:%d",
+		fmt.Sprintf("mongodb://%s:%s@journaling-app-mongo:%d",
 			config.Cfg.Database.User,
 			config.Cfg.Database.Password,
-			config.Cfg.Host,
 			config.Cfg.Database.Port)))
 
 	if err != nil {

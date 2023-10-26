@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net"
+	"sync/atomic"
+	"time"
 
 	"github.com/catness812/PAD-lab1/journal_svc/internal/config"
 	rpctransport "github.com/catness812/PAD-lab1/journal_svc/internal/controller/rpc-transport"
@@ -20,14 +22,17 @@ func main() {
 	db := mongo.LoadDatabase()
 	journalRepo := repository.InitJournalRepository(db)
 	journalSvc := service.InitJournalService(journalRepo)
-	go grpcStart(journalSvc)
-	utils.RegisterService()
+
+	for port := 50055; port <= 50057; port++ {
+		go grpcStart(journalSvc, port)
+		utils.RegisterService(port)
+	}
 
 	select {}
 }
 
-func grpcStart(journalSvc rpctransport.IJournalService) {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Cfg.GrpcPort))
+func grpcStart(journalSvc rpctransport.IJournalService, port int) {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		slog.Error(err)
 		panic(err)
@@ -43,6 +48,23 @@ func grpcStart(journalSvc rpctransport.IJournalService) {
 	})
 
 	slog.Infof("gRPC Server listening at %v\n", lis.Addr())
+
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			atomic.StoreInt32(&rpctransport.JournalPingCounter, 0)
+		}
+	}()
+
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			load := atomic.LoadInt32(&rpctransport.JournalPingCounter)
+			if load > 60 {
+				slog.Errorf("Critical load reached: %d pings per second", load)
+			}
+		}
+	}()
 
 	if err := s.Serve(lis); err != nil {
 		slog.Error(err)

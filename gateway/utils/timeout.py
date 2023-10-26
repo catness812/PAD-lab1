@@ -7,7 +7,7 @@ def check_timeout(func, *args, **kwargs):
         process = Process(target=func)
 
     process.start()
-    process.join(timeout=10)
+    process.join(timeout=20)
 
     if process.is_alive():
         process.terminate()

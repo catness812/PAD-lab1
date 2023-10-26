@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net"
+	"sync/atomic"
+	"time"
 
 	"github.com/catness812/PAD-lab1/user_svc/internal/config"
 	rpctransport "github.com/catness812/PAD-lab1/user_svc/internal/controller/rpc-transport"
@@ -21,14 +23,17 @@ func main() {
 	db := postgres.LoadDatabase()
 	userRepo := repository.InitUserRepository(db)
 	userSvc := service.InitUserService(userRepo)
-	go grpcStart(userSvc)
-	utils.RegisterService()
+
+	for port := 50051; port <= 50053; port++ {
+		go grpcStart(userSvc, port)
+		utils.RegisterService(port)
+	}
 
 	select {}
 }
 
-func grpcStart(userSvc rpctransport.IUserService) {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Cfg.GrpcPort))
+func grpcStart(userSvc rpctransport.IUserService, port int) {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		slog.Error(err)
 		panic(err)
@@ -44,6 +49,23 @@ func grpcStart(userSvc rpctransport.IUserService) {
 	})
 
 	slog.Infof("gRPC Server listening at %v\n", lis.Addr())
+
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			atomic.StoreInt32(&rpctransport.UserPingCounter, 0)
+		}
+	}()
+
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			load := atomic.LoadInt32(&rpctransport.UserPingCounter)
+			if load > 60 {
+				slog.Errorf("Critical load reached: %d pings per second", load)
+			}
+		}
+	}()
 
 	if err := s.Serve(lis); err != nil {
 		slog.Error(err)

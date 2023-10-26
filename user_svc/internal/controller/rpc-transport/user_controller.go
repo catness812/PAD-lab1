@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/catness812/PAD-lab1/user_svc/internal/models"
 	"github.com/catness812/PAD-lab1/user_svc/internal/pb"
@@ -11,6 +12,8 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/gookit/slog"
 )
+
+var UserPingCounter int32
 
 type IUserService interface {
 	RegisterNewUser(user models.User) error
@@ -24,6 +27,7 @@ type Server struct {
 }
 
 func (s *Server) RegisterUser(_ context.Context, req *pb.RegisterUserRequest) (*pb.RegisterUserResponse, error) {
+	atomic.AddInt32(&UserPingCounter, 1)
 	newUser := models.User{
 		Username: req.User.Username,
 		Password: req.User.Password,
@@ -40,20 +44,24 @@ func (s *Server) RegisterUser(_ context.Context, req *pb.RegisterUserRequest) (*
 			slog.Errorf("Error registering new user: %v", err)
 			return nil, err
 		}
-	} else if user.ID != 0 {
+		slog.Infof("User '%v' successfully created", newUser.Username)
+		return &pb.RegisterUserResponse{
+			Message: fmt.Sprintf("User '%v' successfully signed up", newUser.Username),
+		}, nil
+	}
+
+	if user.ID != 0 {
 		slog.Errorf("User '%v' has already signed up", user.Username)
 		return &pb.RegisterUserResponse{
 			Message: fmt.Sprintf("User '%v' has already signed up", user.Username),
 		}, nil
 	}
 
-	slog.Infof("User '%v' successfully created", newUser.Username)
-	return &pb.RegisterUserResponse{
-		Message: fmt.Sprintf("User '%v' successfully signed up", newUser.Username),
-	}, nil
+	return nil, nil
 }
 
 func (s *Server) CheckIfUserExists(_ context.Context, req *pb.User) (*empty.Empty, error) {
+	atomic.AddInt32(&UserPingCounter, 1)
 	user, err := s.UserService.FindUser(req.Username)
 	if err != nil {
 		slog.Errorf("Error finding user: %v", err)
@@ -68,6 +76,7 @@ func (s *Server) CheckIfUserExists(_ context.Context, req *pb.User) (*empty.Empt
 }
 
 func (s *Server) DeleteUser(_ context.Context, req *pb.User) (*pb.DeleteUserResponse, error) {
+	atomic.AddInt32(&UserPingCounter, 1)
 	user, err := s.UserService.FindUser(req.Username)
 	if err != nil {
 		slog.Errorf("Error finding user: %v", err)
