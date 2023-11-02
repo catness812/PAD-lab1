@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/catness812/PAD-lab1/journal_svc/internal/config"
+	"github.com/catness812/PAD-labs/journal_svc/internal/config"
 	"github.com/gookit/slog"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

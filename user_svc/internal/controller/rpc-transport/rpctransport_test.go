@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	rpctransport "github.com/catness812/PAD-lab1/user_svc/internal/controller/rpc-transport"
-	"github.com/catness812/PAD-lab1/user_svc/internal/models"
-	"github.com/catness812/PAD-lab1/user_svc/internal/pb"
+	rpctransport "github.com/catness812/PAD-labs/user_svc/internal/controller/rpc-transport"
+	"github.com/catness812/PAD-labs/user_svc/internal/models"
+	"github.com/catness812/PAD-labs/user_svc/internal/pb"
 )
 
 type MockUserService struct {

@@ -1,6 +1,6 @@
 package service
 
-import "github.com/catness812/PAD-lab1/journal_svc/internal/models"
+import "github.com/catness812/PAD-labs/journal_svc/internal/models"
 
 type IJournalRepository interface {
 	Save(entry *models.JournalEntry) error

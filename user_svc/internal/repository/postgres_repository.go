@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/catness812/PAD-lab1/user_svc/internal/models"
+	"github.com/catness812/PAD-labs/user_svc/internal/models"
 	"gorm.io/gorm"
 )
 

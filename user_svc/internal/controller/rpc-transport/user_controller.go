@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"sync/atomic"
 
-	"github.com/catness812/PAD-lab1/user_svc/internal/models"
-	"github.com/catness812/PAD-lab1/user_svc/internal/pb"
-	"github.com/catness812/PAD-lab1/user_svc/internal/utils"
+	"github.com/catness812/PAD-labs/user_svc/internal/models"
+	"github.com/catness812/PAD-labs/user_svc/internal/pb"
+	"github.com/catness812/PAD-labs/user_svc/internal/utils"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/gookit/slog"
 )

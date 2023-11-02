@@ -1,6 +1,10 @@
 # Project: Online Journaling Application
 A platform that allows users to create, store, and manage personal journal entries. Users can write about their thoughts, experiences, and reflections in a digital format. Implementing such an application using microservices architecture involves breaking down the various components and functionalities of the app into separate, independent services.
 
+-----------
+[How to run the application?](#how-to-run-the-application-1)
+-----------
+
 Microservices may be relevant and necessary for such an application because of the following concepts:
 
 1. **Scalability**: the application can experience varying levels of user activity. Microservices allow scaling specific components independently. For instance, the user registration/authentication service can be scaled separately from the journaling service to handle spikes in user activities.
@@ -146,3 +150,18 @@ GET request to retrieve a user's journal entries.
     ]
 }
 ```
+
+-----------
+## How to run the application?
+1. Install Docker
+2. Clone the project
+### Docker
+1. Pull the required images:
+```
+docker pull munchkin0812/pad-lab1 --all-tags
+```
+2. Run the app (in the root folder of the project):
+```
+docker compose up --build
+```
+3. Allow 15-30 seconds before making any requests.

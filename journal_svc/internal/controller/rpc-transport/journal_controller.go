@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"sync/atomic"
 
-	"github.com/catness812/PAD-lab1/journal_svc/internal/models"
-	"github.com/catness812/PAD-lab1/journal_svc/internal/pb"
-	usersvc "github.com/catness812/PAD-lab1/journal_svc/internal/user_svc"
+	"github.com/catness812/PAD-labs/journal_svc/internal/models"
+	"github.com/catness812/PAD-labs/journal_svc/internal/pb"
+	usersvc "github.com/catness812/PAD-labs/journal_svc/internal/user_svc"
 	"github.com/gookit/slog"
 )
 

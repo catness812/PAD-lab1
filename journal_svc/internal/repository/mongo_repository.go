@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/catness812/PAD-lab1/journal_svc/internal/models"
+	"github.com/catness812/PAD-labs/journal_svc/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )

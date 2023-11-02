@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/catness812/PAD-lab1/journal_svc/internal/pb"
+	"github.com/catness812/PAD-labs/journal_svc/internal/pb"
 	"github.com/gookit/slog"
 	"github.com/hashicorp/consul/api"
 	"google.golang.org/grpc"

@@ -1,8 +1,8 @@
 package usersvc
 
 import (
-	"github.com/catness812/PAD-lab1/journal_svc/internal/pb"
-	"github.com/catness812/PAD-lab1/journal_svc/internal/utils"
+	"github.com/catness812/PAD-labs/journal_svc/internal/pb"
+	"github.com/catness812/PAD-labs/journal_svc/internal/utils"
 	"github.com/gookit/slog"
 )
 

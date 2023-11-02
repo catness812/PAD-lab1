@@ -3,14 +3,10 @@ version: '3.8'
 services:
   consul-server:
     image: hashicorp/consul:latest
-    networks:
-      - journaling-app-network
     command: "agent -server -bootstrap"
   consul-agent1:
     image: hashicorp/consul:latest
     container_name: consul
-    networks:
-      - journaling-app-network
     ports:
       - "8500:8500"
     command: "agent -join consul-server -client 0.0.0.0 -ui"
@@ -20,8 +16,6 @@ services:
       - consul-server
   consul-agent2:
     image: hashicorp/consul:latest
-    networks:
-      - journaling-app-network
     command: "agent -join consul-server -client 0.0.0.0"
     links:
       - consul-server
@@ -31,8 +25,6 @@ services:
   postgres:
     container_name: journaling-app-postgres
     image: postgres:16.0
-    networks:
-      - journaling-app-network
     environment:
       POSTGRES_DB: journaling-app-db
       POSTGRES_USER: postgres
@@ -51,8 +43,6 @@ services:
   mongodb:
     image: mongo:latest
     container_name: journaling-app-mongo
-    networks:
-      - journaling-app-network
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
@@ -64,42 +54,30 @@ services:
   redis:
     image: redis:latest
     container_name: journaling-app-redis
-    networks:
-      - journaling-app-network
     volumes:
       - redis-data:/data
     ports:
       - "6379:6379"
 
   user_svc:
-    image: user_svc:latest
+    image: munchkin0812/pad-lab1:user_svc
     container_name: user-service
-    ports:
-      - "50052:50052"
-    networks:
-      - journaling-app-network
     depends_on:
       - postgres
       - redis
 
   journal_svc:
-    image: journal_svc:latest
+    image: munchkin0812/pad-lab1:journal_svc
     container_name: journal-service
-    ports:
-      - "50055:50055"
-    networks:
-      - journaling-app-network
     depends_on:
       - mongodb
       - redis
 
   gateway:
-    image: gateway:latest
+    image: munchkin0812/pad-lab1:gateway
     container_name: gateway
     ports:
-      - "5000:5000"
-    networks:
-      - journaling-app-network
+      - 5000:5000
     depends_on:
       - user_svc
       - journal_svc
@@ -111,7 +89,3 @@ volumes:
     driver: local
   mongodb_data_cont:
     driver: local
-
-networks:
-  journaling-app-network:
-    driver: bridge
