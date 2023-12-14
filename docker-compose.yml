@@ -1,6 +1,23 @@
 version: '3.8'
 
 services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    hostname: grafana
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+
   consul-server:
     image: hashicorp/consul:latest
     command: "agent -server -bootstrap"
@@ -24,21 +41,20 @@ services:
 
   postgres:
     container_name: journaling-app-postgres
-    image: postgres:16.0
+    image: postgres:latest
     environment:
       POSTGRES_DB: journaling-app-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       PGDATA: /data/journaling-app-db
     volumes:
-      - postgres-db:/data/postgres
+      - postgres:/data/postgres
     ports:
       - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5
 
   mongodb:
     image: mongo:latest
@@ -49,13 +65,13 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongodb_data_cont:/data/db
+      - mongodb:/data/db
 
   redis:
     image: redis:latest
     container_name: journaling-app-redis
     volumes:
-      - redis-data:/data
+      - redis:/data
     ports:
       - "6379:6379"
 
@@ -81,11 +97,12 @@ services:
     depends_on:
       - user_svc
       - journal_svc
+      - prometheus
 
 volumes:
-  postgres-db:
+  postgres:
     driver: local
-  redis-data:
+  redis:
     driver: local
-  mongodb_data_cont:
+  mongodb:
     driver: local

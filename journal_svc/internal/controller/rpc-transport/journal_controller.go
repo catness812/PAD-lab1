@@ -16,6 +16,7 @@ var JournalPingCounter int32
 type IJournalService interface {
 	RegisterNewEntry(entry models.JournalEntry) error
 	GetUserEntries(username string) ([]models.JournalEntry, error)
+	DeleteUserEntries(username string) error
 }
 
 type Server struct {
@@ -81,5 +82,20 @@ func (s *Server) GetUserEntries(_ context.Context, req *pb.GetUserEntriesRequest
 	return &pb.GetUserEntriesResponse{
 		Message: fmt.Sprintf("Successfully retrieved journal entries for user '%v'", req.Username),
 		Entries: pbEntries,
+	}, nil
+}
+
+func (s *Server) DeleteUserEntries(_ context.Context, req *pb.DeleteUserEntriesRequest) (*pb.DeleteUserEntriesResponse, error) {
+	atomic.AddInt32(&JournalPingCounter, 1)
+	if err := s.JournalService.DeleteUserEntries(req.Username); err != nil {
+		slog.Errorf("Could not delete entries for user '%v': %v", req.Username, err)
+		return &pb.DeleteUserEntriesResponse{
+			Message: fmt.Sprintf("Could not delete entries for user '%v': %v", req.Username, err),
+		}, nil
+	}
+
+	slog.Infof("Successfully deleted journal entries for user '%v'", req.Username)
+	return &pb.DeleteUserEntriesResponse{
+		Message: fmt.Sprintf("Successfully deleted journal entries for user '%v'", req.Username),
 	}, nil
 }

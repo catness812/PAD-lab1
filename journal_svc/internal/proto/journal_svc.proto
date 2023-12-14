@@ -27,7 +27,16 @@ message GetUserEntriesResponse {
     repeated Entry entries = 2;
 }
 
+message DeleteUserEntriesRequest {
+    string username = 1;
+}
+
+message DeleteUserEntriesResponse {
+    string message = 1;
+}
+
 service JournalService {
     rpc RegisterEntry(RegisterEntryRequest) returns (RegisterEntryResponse);
     rpc GetUserEntries(GetUserEntriesRequest) returns (GetUserEntriesResponse);
+    rpc DeleteUserEntries(DeleteUserEntriesRequest) returns (DeleteUserEntriesResponse);
 }

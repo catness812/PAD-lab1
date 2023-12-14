@@ -44,20 +44,17 @@ func (s *Server) RegisterUser(_ context.Context, req *pb.RegisterUserRequest) (*
 			slog.Errorf("Error registering new user: %v", err)
 			return nil, err
 		}
-		slog.Infof("User '%v' successfully created", newUser.Username)
-		return &pb.RegisterUserResponse{
-			Message: fmt.Sprintf("User '%v' successfully signed up", newUser.Username),
-		}, nil
-	}
+	} // else if user.ID != 0 {
+	// 	slog.Errorf("User '%v' has already signed up", user.Username)
+	// 	return &pb.RegisterUserResponse{
+	// 		Message: fmt.Sprintf("User '%v' has already signed up", user.Username),
+	// 	}, nil
+	// }
 
-	if user.ID != 0 {
-		slog.Errorf("User '%v' has already signed up", user.Username)
-		return &pb.RegisterUserResponse{
-			Message: fmt.Sprintf("User '%v' has already signed up", user.Username),
-		}, nil
-	}
-
-	return nil, nil
+	slog.Infof("User '%v' successfully created", newUser.Username)
+	return &pb.RegisterUserResponse{
+		Message: fmt.Sprintf("User '%v' successfully signed up", newUser.Username),
+	}, nil
 }
 
 func (s *Server) CheckIfUserExists(_ context.Context, req *pb.User) (*empty.Empty, error) {
@@ -96,6 +93,12 @@ func (s *Server) DeleteUser(_ context.Context, req *pb.User) (*pb.DeleteUserResp
 			Message: "Wrong password",
 		}, nil
 	}
+
+	// if _, err := journalsvc.JournalServiceClient().DeleteUserEntries(context.Background(), &pb.DeleteUserEntriesRequest{Username: req.Username}); err != nil {
+	// 	return &pb.DeleteUserResponse{
+	// 		Message: fmt.Sprintf("Could not delete entries for user '%v': %v", req.Username, err),
+	// 	}, nil
+	// }
 
 	if err = s.UserService.DeleteUser(req.Username); err != nil {
 		slog.Errorf("Error deleting user '%v': %v", req.Username, err)

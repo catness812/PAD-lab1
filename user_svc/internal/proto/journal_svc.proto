@@ -1,0 +1,15 @@
+syntax="proto3";
+
+option go_package="./pb";
+
+message DeleteUserEntriesRequest {
+    string username = 1;
+}
+
+message DeleteUserEntriesResponse {
+    string message = 1;
+}
+
+service JournalService {
+    rpc DeleteUserEntries(DeleteUserEntriesRequest) returns (DeleteUserEntriesResponse);
+}

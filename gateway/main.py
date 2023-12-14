@@ -1,14 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from utils.timeout import check_timeout
 from config.config import host, http_port
 from user_svc.client import register_user_handler, delete_user_handler
 from journal_svc.client import register_entry_handler, get_user_entries_handler
 from utils.service_discovery import register_services, check
 from cache.redis import redis_client
+from prometheus_flask_exporter import PrometheusMetrics
 
 register_services()
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 @app.route('/health/<svc>', methods=['GET'])
 def health(svc):

@@ -55,3 +55,12 @@ func (repo *JournalRepository) GetEntries(username string) ([]models.JournalEntr
 
 	return entries, nil
 }
+
+func (repo *JournalRepository) DeleteEntries(username string) error {
+	filter := bson.M{"username": username}
+	_, err := repo.db.DeleteMany(context.TODO(), filter)
+	if err != nil {
+		return err
+	}
+	return nil
+}

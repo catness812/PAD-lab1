@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: gateway
+    honor_timestamps: true
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets:
+          - gateway:5000
+  - job_name: users
+    honor_timestamps: true
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets:
+          - user_svc:51051
+          - user_svc:51052
+          - user_svc:51053
+  - job_name: journal_entries
+    honor_timestamps: true
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets:
+          - journal_svc:51055
+          - journal_svc:51056
+          - journal_svc:51057

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"net/http"
 	"sync/atomic"
 	"time"
 
@@ -14,6 +15,9 @@ import (
 	"github.com/catness812/PAD-labs/user_svc/internal/utils"
 	"github.com/catness812/PAD-labs/user_svc/pkg/db/postgres"
 	"github.com/gookit/slog"
+	grpcprom "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 )
 
@@ -42,6 +46,10 @@ func grpcStart(userSvc rpctransport.IUserService, port int) {
 		grpc.MaxConcurrentStreams(20),
 	}
 
+	srvMetrics := srvMetrics(port)
+	opts = append(opts, grpc.ChainUnaryInterceptor(
+		srvMetrics.UnaryServerInterceptor(),
+	))
 	s := grpc.NewServer(opts...)
 	pb.RegisterUserServiceServer(s, &rpctransport.Server{
 		UserService: userSvc,
@@ -70,4 +78,23 @@ func grpcStart(userSvc rpctransport.IUserService, port int) {
 		slog.Error(err)
 		panic(err)
 	}
+}
+
+func srvMetrics(port int) *grpcprom.ServerMetrics {
+	srvMetrics := grpcprom.NewServerMetrics(
+		grpcprom.WithServerHandlingTimeHistogram(
+			grpcprom.WithHistogramBuckets([]float64{0.001, 0.01, 0.1, 0.3, 0.6, 1, 3, 6, 9, 20, 30, 60, 90, 120}),
+		),
+	)
+	reg := prometheus.NewRegistry()
+	reg.MustRegister(srvMetrics)
+
+	http.Handle(fmt.Sprintf("/metrics-user-%d", port), promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
+	go func() {
+		if err := http.ListenAndServe(fmt.Sprintf(":%d", port+1000), nil); err != nil {
+			slog.Error(err)
+			panic(err)
+		}
+	}()
+	return srvMetrics
 }
